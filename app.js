@@ -34,6 +34,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Assign the new URL to the previously opened window
             newWindow.location.href = pdfUrl;
+
+            // Set the download attribute to ensure the correct file name is used
+            newWindow.onload = () => {
+                const a = newWindow.document.createElement('a');
+                a.href = pdfUrl;
+                a.download = customFileName || generateDefaultFileName();
+                newWindow.document.body.appendChild(a);
+                a.click();
+                newWindow.document.body.removeChild(a);
+            };
         } else {
             alert('Please select images to view the PDF.');
         }
