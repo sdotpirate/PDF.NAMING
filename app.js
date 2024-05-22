@@ -26,24 +26,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 customFileName += '.pdf';
             }
 
-            // Open a blank window first
-            const newWindow = window.open("", "_blank");
-
             const pdfBlob = await createPdf(input.files, notes, notesPosition, customFileName, true);
             const pdfUrl = URL.createObjectURL(pdfBlob);
 
-            // Assign the new URL to the previously opened window
-            newWindow.location.href = pdfUrl;
+            // Open the PDF in a new tab
+            const newWindow = window.open(pdfUrl, "_blank");
 
-            // Set the download attribute to ensure the correct file name is used
-            newWindow.onload = () => {
-                const a = newWindow.document.createElement('a');
-                a.href = pdfUrl;
-                a.download = customFileName || generateDefaultFileName();
-                newWindow.document.body.appendChild(a);
-                a.click();
-                newWindow.document.body.removeChild(a);
-            };
+            // Automatically download the file with the correct name
+            const a = document.createElement('a');
+            a.href = pdfUrl;
+            a.download = customFileName || generateDefaultFileName();
+            a.click();
         } else {
             alert('Please select images to view the PDF.');
         }
